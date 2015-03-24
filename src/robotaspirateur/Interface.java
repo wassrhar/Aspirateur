@@ -37,6 +37,7 @@ public class Interface extends javax.swing.JFrame {
         TabbedPanePiece = new javax.swing.JTabbedPane();
         PanelPieceRobot = new javax.swing.JPanel();
         ButtonTest = new javax.swing.JToggleButton();
+        TextFieldTest = new javax.swing.JTextField();
         PanelPiece = new javax.swing.JPanel();
         Menu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -77,13 +78,17 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
+        TextFieldTest.setText("jTextField1");
+
         javax.swing.GroupLayout PanelPieceRobotLayout = new javax.swing.GroupLayout(PanelPieceRobot);
         PanelPieceRobot.setLayout(PanelPieceRobotLayout);
         PanelPieceRobotLayout.setHorizontalGroup(
             PanelPieceRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelPieceRobotLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(ButtonTest)
+                .addGroup(PanelPieceRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(ButtonTest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TextFieldTest))
                 .addContainerGap(167, Short.MAX_VALUE))
         );
         PanelPieceRobotLayout.setVerticalGroup(
@@ -91,7 +96,9 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(PanelPieceRobotLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(ButtonTest)
-                .addContainerGap(203, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(TextFieldTest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(165, Short.MAX_VALUE))
         );
 
         TabbedPanePiece.addTab("tab1", PanelPieceRobot);
@@ -146,6 +153,7 @@ public class Interface extends javax.swing.JFrame {
 
     private void ButtonTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTestActionPerformed
         TextPanelTest.setText(p1.getDescription());
+        TextFieldTest.setText(Integer.toString(p1.getTaille()));
     }//GEN-LAST:event_ButtonTestActionPerformed
 
     /**
@@ -190,6 +198,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel PanelPieceRobot;
     private javax.swing.JPanel PanelRobot;
     private javax.swing.JTabbedPane TabbedPanePiece;
+    private javax.swing.JTextField TextFieldTest;
     private javax.swing.JTextPane TextPanelTest;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
