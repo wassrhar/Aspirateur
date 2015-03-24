@@ -5,6 +5,12 @@ public class Position {
 	private String type;
 	private int qtePoussiere;
 	
+	Position(int tX, int tY, String ttype, int tQtePoussiere){
+		x=tX;
+		y=tY;
+		type=ttype;
+		qtePoussiere=tQtePoussiere;
+	}
 	public int getQtePoussiere() {
 		return qtePoussiere;
 	}

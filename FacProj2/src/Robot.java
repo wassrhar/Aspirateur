@@ -3,31 +3,57 @@ public class Robot extends Thread{
 	private float capaciteBatterie;
 	private int reservePoussiere;
 	private int etatReserve;
-	private String directionCourante;
+	private int directionCourante;
+	/*
+	 * 0=Haut
+	 * 1=Droit
+	 * 2=Gauche
+	 * 3=Bas
+	 */
 	private Capteurs droit;
 	private Capteurs gauche;
 	private Capteurs haut;
 	private Capteurs bas;
 	private Capteurs antiVide;
 	private int cartographie;
-	private String positionBase;
 	private Position positionCourante;
 	private int puissance;
 	private boolean aspire;
+	private float consommationBase=1;
 	
-	public boolean aspirer(){
-		int poussiereAspire=0;
-		while(positionCourante.getQtePoussiere()>0 && poussiereAspire<puissance){
-			if(etatReserve+1<reservePoussiere){
-				positionCourante.setQtePoussiere(positionCourante.getQtePoussiere()-1);
-				reservePoussiere++;
-				poussiereAspire++;
-			}
-			else{
-				break;
-			}
+	Robot(float cap, int reser, int puiss, int direc, Base laBase){
+		capaciteBatterie=cap;
+		reservePoussiere=reser;
+		etatReserve=0;
+		directionCourante=direc;
+		//Cartographie
+		//Capteurs
+		puissance=puiss;
+		aspire=false;
+		positionCourante=new Position(laBase.getX(),laBase.getY(),"BB",0);
+		if(direc>=0 && direc<4){
+			directionCourante=direc;
 		}
-		return aspire;	
+		else{
+			directionCourante=0;
+		}
+	}
+	
+	@Override
+	public void run() {
+		System.out.println("TEST");
+	}
+
+	public void deplacer(){
+		
+	}
+	public void aspirer(){
+		int poussiereAspire=0;
+		while(positionCourante.getQtePoussiere()>0 && poussiereAspire<puissance && etatReserve<reservePoussiere){
+			positionCourante.setQtePoussiere(positionCourante.getQtePoussiere()-1);
+			reservePoussiere++;
+			poussiereAspire++;
+		}
 	}
 	public boolean isAspire() {
 		return aspire;
@@ -43,8 +69,8 @@ public class Robot extends Thread{
 		boolean noMoreEnergy=false;
 		
 		if(positionCourante.getType().charAt(0)=='T'){
-			if(this.capaciteBatterie-1.5>0){
-				this.capaciteBatterie=(float) (this.capaciteBatterie-1.5);
+			if(this.capaciteBatterie-consommationBase*1.5>0){
+				this.capaciteBatterie=(float) (this.capaciteBatterie-consommationBase*1.5);
 			}
 			else{
 				noMoreEnergy=true;
@@ -56,7 +82,7 @@ public class Robot extends Thread{
 		}
 		
 		if(aspire && !noMoreEnergy){
-			if(this.capaciteBatterie-1>0){
+			if(this.capaciteBatterie-consommationBase>0){
 				this.capaciteBatterie--;
 			}
 			else{
@@ -81,10 +107,10 @@ public class Robot extends Thread{
 	public void setReservePoussiere(int reservePoussiere) {
 		this.reservePoussiere = reservePoussiere;
 	}
-	public String getDirectionCourante() {
+	public int getDirectionCourante() {
 		return directionCourante;
 	}
-	public void setDirectionCourante(String directionCourante) {
+	public void setDirectionCourante(int directionCourante) {
 		this.directionCourante = directionCourante;
 		this.capaciteBatterie--;
 	}
@@ -123,12 +149,6 @@ public class Robot extends Thread{
 	}
 	public void setCartographie(int cartographie) {
 		this.cartographie = cartographie;
-	}
-	public String getPositionBase() {
-		return positionBase;
-	}
-	public void setPositionBase(String positionBase) {
-		this.positionBase = positionBase;
 	}
 	public int getPuissance() {
 		return puissance;
