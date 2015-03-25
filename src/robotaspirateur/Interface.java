@@ -152,8 +152,15 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void ButtonTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonTestActionPerformed
-        TextPanelTest.setText(p1.getDescription());
-        TextFieldTest.setText(Integer.toString(p1.getTaille()));
+        for(int i=0; i < p1.getTaille(); i++)
+        {
+            TextPanelTest.setText(TextPanelTest.getText()+"\n"+
+                    Integer.toString(p1.getPositions()[i].getX())+" "+
+                    Integer.toString(p1.getPositions()[i].getY())+" "+
+                    p1.getPositions()[i].getType()+" "+
+                    p1.getPositions()[i].getQtePoussiere());
+        }
+        
     }//GEN-LAST:event_ButtonTestActionPerformed
 
     /**

@@ -96,7 +96,7 @@ public class Piece extends Thread
                 {
                     largeur = ligne.length()/2;
                 }
-                description = description + ligne + "\n";
+                description = description + ligne;
                 longueur++;
             }
             
@@ -120,10 +120,53 @@ public class Piece extends Thread
     public void listerPositions()
     {
         positions = new Position[taille];
+        String type;
+        int qtepoussiere;
+        int x,y;
         
         for(int i=0; i<taille; i++)
         {
-            positions[i] = new Position(
+            type = description.substring(i*2,i*2+2);
+            switch(type.charAt(1))
+            {
+                case '9':
+                    qtepoussiere = 9;
+                    break;
+                case '8':
+                    qtepoussiere = 8;
+                    break;
+                case '7':
+                    qtepoussiere = 7;
+                    break;
+                case '6':
+                    qtepoussiere = 6;
+                    break;
+                case '5':
+                    qtepoussiere = 5;
+                    break;
+                case '4':
+                    qtepoussiere = 4;
+                    break;
+                case '3':
+                    qtepoussiere = 3;
+                    break;
+                case '2':
+                    qtepoussiere = 2;
+                    break;
+                case '1':
+                    qtepoussiere = 1;
+                    break;
+                case '0':
+                    qtepoussiere = 0;
+                    break;
+                default : 
+                    qtepoussiere = 0;
+                    break;
+            }
+           
+            y = (int)(i/largeur);
+            x = i-(largeur*y);
+            positions[i] = new Position(x,y,type,qtepoussiere);
         }
         
     }
