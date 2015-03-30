@@ -29,6 +29,9 @@ public class Position {
 	public void setY(int y) {
 		this.y = y;
 	}
+	public void afficher(){
+		System.out.println("("+getX()+","+getY()+")"+getType());
+	}
 	public String getType() {
 		return type;
 	}

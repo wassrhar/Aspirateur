@@ -16,12 +16,17 @@ public class Robot extends Thread{
 	private Capteurs bas;
 	private Capteurs antiVide;
 	private int cartographie;
+	private Position positionBase;
 	private Position positionCourante;
 	private int puissance;
 	private boolean aspire;
 	private float consommationBase=1;
 	
-	Robot(float cap, int reser, int puiss, int direc, Base laBase){
+	Robot(float cap, int reser, int puiss, int direc, Position laBase){
+		droit=new Capteurs();
+		gauche=new Capteurs();
+		haut=new Capteurs();
+		bas=new Capteurs();
 		capaciteBatterie=cap;
 		reservePoussiere=reser;
 		etatReserve=0;
@@ -30,7 +35,8 @@ public class Robot extends Thread{
 		//Capteurs
 		puissance=puiss;
 		aspire=false;
-		positionCourante=new Position(laBase.getX(),laBase.getY(),"BB",0);
+		positionBase=laBase;
+		positionCourante=laBase;
 		if(direc>=0 && direc<4){
 			directionCourante=direc;
 		}
@@ -40,12 +46,31 @@ public class Robot extends Thread{
 	}
 	
 	@Override
+	public String toString() {
+		return "Robot [capaciteBatterie=" + capaciteBatterie
+				+ ", reservePoussiere=" + reservePoussiere + ", etatReserve="
+				+ etatReserve + ", directionCourante=" + directionCourante
+				+ ", droit=" + droit + ", gauche=" + gauche + ", haut=" + haut
+				+ ", bas=" + bas + ", antiVide=" + antiVide + ", cartographie="
+				+ cartographie + ", positionCourante=" + positionCourante
+				+ ", puissance=" + puissance + ", aspire=" + aspire
+				+ ", consommationBase=" + consommationBase + "]";
+	}
+
+	@Override
 	public void run() {
-		System.out.println("TEST");
+		this.deplacer();
 	}
 
 	public void deplacer(){
-		
+		int[] dimensionsPiece=Piece.getDimensions();
+		if(dimensionsPiece[0]>0 && dimensionsPiece[1]>0){
+			boolean access=droit.isAccessible(positionBase.getX()+2,positionBase.getY());
+			if(access){
+				Position test=Piece.getPosition(positionBase.getX()+2,positionBase.getY());
+				test.afficher();
+			}
+		}
 	}
 	public void aspirer(){
 		int poussiereAspire=0;
@@ -155,5 +180,13 @@ public class Robot extends Thread{
 	}
 	public void setPuissance(int puissance) {
 		this.puissance = puissance;
+	}
+
+	public Position getPositionBase() {
+		return positionBase;
+	}
+
+	public void setPositionBase(Position positionBase) {
+		this.positionBase = positionBase;
 	}
 }

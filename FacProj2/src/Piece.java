@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package robotaspirateur;
 import java.io.*;
 import java.util.*;
 
@@ -14,29 +13,73 @@ import java.util.*;
 public class Piece extends Thread
 {
     protected int taille;
-    protected int longueur;
-    protected int largeur;
+    protected static int longueur=0;
+    protected static int largeur=0;
     protected String fichier;
     protected String description;
-    protected Position[] positions;
+    protected static Position[] positions;
 
     public Piece(String fichier) 
     {
         this.fichier = fichier;
         this.taille = 0;
-        this.longueur = 0;
-        this.largeur = 0;
         this.description = "";
+       
     }
 
+    public Position getBase(){
+		for(int i=0;i<positions.length;i++){
+			if(positions[i].getType().equals("BB")){
+				return positions[i];
+			}
+		}
+		return null;
+    }
     public int getTaille() {
         return taille;
     }
-
+    public static int[] getDimensions(){
+    	int[] toReturn=new int[2];
+    	toReturn[0]=largeur;
+    	toReturn[1]=longueur;
+		return toReturn;    	
+    }
     public void setTaille(int taille) {
         this.taille = taille;
     }
-
+    public static boolean estAccessiblePosition(int x, int y){
+    	if(positions.length>0){
+    		Position p1=null;
+    		for(int i=0;i<positions.length;i++){
+    			if(positions[i].getX()==x && positions[i].getY()==y){
+    				p1=positions[i];
+    			}
+    		}
+    		if(p1!=null){
+    			return (!p1.getType().equals("BB") || !p1.getType().equals("VV"));
+    		}
+    		return false;
+    	}
+    	return false;
+    }
+    
+    public static Position getPosition(int x,int y){
+    	Position p1=null;
+		for(int i=0;i<positions.length;i++){
+			if(positions[i].getX()==x && positions[i].getY()==y){
+				p1=positions[i];
+			}
+		}
+		return p1;
+    }
+    /*public int getIdOfPosition(int x,int y){
+    	for(int i=0;i<positions.length;i++){
+    		if(positions[i].getX()==x && positions[i].getY()==y){
+    			return i;
+    		}
+    	}
+    	return 0;
+    }*/
     public String getFichier() {
         return fichier;
     }
@@ -58,7 +101,7 @@ public class Piece extends Thread
     }
 
     public void setPositions(Position[] positions) {
-        this.positions = positions;
+        Piece.positions = positions;
     }
 
     public int getLongueur() {
@@ -66,7 +109,7 @@ public class Piece extends Thread
     }
 
     public void setLongueur(int longueur) {
-        this.longueur = longueur;
+        Piece.longueur = longueur;
     }
 
     public int getLargeur() {
@@ -74,7 +117,7 @@ public class Piece extends Thread
     }
 
     public void setLargeur(int largeur) {
-        this.largeur = largeur;
+        Piece.largeur = largeur;
     }
     
     /**
@@ -84,12 +127,9 @@ public class Piece extends Thread
     {
         BufferedReader ficTexte;
         String ligne;
-        
         try 
         {
             ficTexte = new BufferedReader(new FileReader(new File(fichier)));
-            if (ficTexte == null) throw new FileNotFoundException("Fichier non trouvé: " + fichier);
-            
             while((ligne = ficTexte.readLine())!= null)
             {
                 if(longueur == 0)
@@ -99,7 +139,7 @@ public class Piece extends Thread
                 description = description + ligne;
                 longueur++;
             }
-            
+
             taille = longueur*largeur;
             
             ficTexte.close();
@@ -174,7 +214,15 @@ public class Piece extends Thread
     @Override
     public void run()
     {
-        this.chargerPiece();
-        this.listerPositions();
+    	 this.chargerPiece();
+         this.listerPositions();
     }
+
+	@Override
+	public String toString() {
+		return "Piece [taille=" + taille + ", longueur=" + longueur
+				+ ", largeur=" + largeur + ", fichier=" + fichier
+				+ ", description=" + description + ", positions="
+				+ Arrays.toString(positions) + "]";
+	}
 }
