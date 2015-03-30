@@ -123,36 +123,49 @@ public class Piece extends Thread
     /**
     * Charge la description de la piece contenu dans le fichier
     */
-    public void chargerPiece()
-    {
-        BufferedReader ficTexte;
-        String ligne;
-        try 
-        {
-            ficTexte = new BufferedReader(new FileReader(new File(fichier)));
-            while((ligne = ficTexte.readLine())!= null)
-            {
-                if(longueur == 0)
-                {
-                    largeur = ligne.length()/2;
-                }
-                description = description + ligne;
-                longueur++;
-            }
-
-            taille = longueur*largeur;
-            
-            ficTexte.close();
-        } 
-        catch (FileNotFoundException e) 
-        {
-            System.out.println(e.getMessage());
-        }
-        catch (IOException e) 
-        {
-            System.out.println(e.getMessage());
-        }
-    }
+    /**
+     * Charge la description de la piece contenu dans le fichier
+     */
+     public void chargerPiece()
+     {
+         BufferedReader ficTexte;
+         String ligne;
+         
+         try 
+         {
+             ficTexte = new BufferedReader(new FileReader(new File(fichier)));
+             if (ficTexte == null) throw new FileNotFoundException("Fichier non trouvé: " + fichier);
+             
+             while((ligne = ficTexte.readLine())!= null)
+             {
+                 if(longueur == 0)
+                 {
+                     largeur = ligne.length()/2;
+                 }
+                 description = description + ligne;
+                 longueur++;
+             }
+             
+             taille = longueur*largeur;
+             
+             ficTexte.close();
+             
+             if(taille != 408 || longueur != 17 || longueur != 24) 
+                 throw new DimensionsException();
+         } 
+         catch (FileNotFoundException e) 
+         {
+             System.out.println(e.getMessage());
+         }
+         catch (IOException e) 
+         {
+             System.out.println(e.getMessage());
+         }
+         catch (DimensionsException e)
+         {
+             System.out.println(e.getMessage());
+         }
+     }
     
     /**
     * Rempli un vector de toutes les positions possibles dans la piÃ¨ce
