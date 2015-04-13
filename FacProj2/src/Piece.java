@@ -171,7 +171,7 @@ public class Piece extends Thread
              
              ficTexte.close();
              
-             if(taille != 408 || longueur != 17 || longueur != 24) 
+             if(taille > 483 || longueur > 25 || largeur > 25) 
                  throw new DimensionsException();
          } 
          catch (FileNotFoundException e) 
@@ -255,6 +255,7 @@ public class Piece extends Thread
          while(true){
         	if(calculerTotalPoussiere()==0){
         		Piece.estPropre=true;
+        		break;
         	}
         	 try {
 				Piece.sleep(500);
@@ -263,6 +264,7 @@ public class Piece extends Thread
 				e.printStackTrace();
 			}
          }
+         System.out.println("PIECE : Fin");
     }
 
 	private int calculerTotalPoussiere() {

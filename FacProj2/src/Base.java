@@ -47,6 +47,7 @@ public class Base extends Thread{
 				e.printStackTrace();
 			}
 		}
+		System.out.println("BASE : Fin");
 	}
 	
 }

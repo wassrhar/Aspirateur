@@ -12,6 +12,6 @@ class DimensionsException extends Exception
 {
     public DimensionsException()
     {
-        super("Les dimensions de la pièce ne correspondent pas aux normes !");
+        super("Les dimensions de la pièce ne correspondent pas aux normes ! (max: 25 x 25)");
     }  
 }
