@@ -1,5 +1,5 @@
 
-public class Base {
+public class Base extends Thread{
 	boolean robotEnCharge;
 	int x,y;
 	
@@ -28,6 +28,23 @@ public class Base {
 		return robotEnCharge;
 	}
 
+	@Override
+	public void run() {
+		while(!Piece.estPropre){
+			try {
+				if(Robot.positionCourante.getX()==x && Robot.positionCourante.getY()==y){
+					Robot.seCharge=true;
+				}
+				else{
+					Robot.seCharge=false;
+				}
+				Thread.sleep(250);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	public void setRobotEnCharge(boolean robotEnCharge) {
 		this.robotEnCharge = robotEnCharge;
 	}

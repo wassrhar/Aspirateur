@@ -12,13 +12,13 @@ import java.util.*;
  */
 public class Piece extends Thread
 {
-    protected int taille;
-    protected static int longueur=0;
-    protected static int largeur=0;
-    protected String fichier;
-    protected String description;
-    protected static Position[] positions;
-
+	private int taille;
+    private static int longueur=0;
+    private static int largeur=0;
+    private String fichier;
+    private String description;
+    public static Position[] positions;
+    public static boolean estPropre=false;
     public Piece(String fichier) 
     {
         this.fichier = fichier;
@@ -56,13 +56,20 @@ public class Piece extends Thread
     			}
     		}
     		if(p1!=null){
-    			return (!p1.getType().equals("BB") || !p1.getType().equals("VV"));
+    			return (!p1.getType().equals("OO") && !p1.getType().equals("VV"));
     		}
     		return false;
     	}
     	return false;
     }
-    
+    public static int getIndexOfPosition(int x, int y){
+		for(int i=0;i<positions.length;i++){
+			if(positions[i].getX()==x && positions[i].getY()==y){
+				return i;
+			}
+		}
+		return -2;
+    }
     public static Position getPosition(int x,int y){
     	Position p1=null;
 		for(int i=0;i<positions.length;i++){
@@ -134,8 +141,6 @@ public class Piece extends Thread
          try 
          {
              ficTexte = new BufferedReader(new FileReader(new File(fichier)));
-             if (ficTexte == null) throw new FileNotFoundException("Fichier non trouvé: " + fichier);
-             
              while((ligne = ficTexte.readLine())!= null)
              {
                  if(longueur == 0)

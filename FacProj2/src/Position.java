@@ -1,5 +1,6 @@
 
-public class Position {
+
+public class Position{
 	private int x;
 	private int y;
 	private String type;
@@ -30,7 +31,7 @@ public class Position {
 		this.y = y;
 	}
 	public void afficher(){
-		System.out.println("("+getX()+","+getY()+")"+getType());
+		System.out.println("("+getX()+","+getY()+")"+getType().substring(0, 1)+" Poussiere = "+qtePoussiere+"/"+getType().substring(1));
 	}
 	public String getType() {
 		return type;
@@ -38,4 +39,7 @@ public class Position {
 	public void setType(String type) {
 		this.type = type;
 	}
+	/*public boolean equals(Position p2){
+		return x==p2.getX() && y==p2.getY();
+	}*/
 }

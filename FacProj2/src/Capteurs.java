@@ -1,8 +1,10 @@
 
 public class Capteurs {
 	boolean obstacle;
-	Capteurs(){
+	int side;//0=Haut 1=Droit 2=Gauche 3=Bas
+	Capteurs(int side){
 		obstacle=true;
+		this.side=side;
 	}
 	public boolean isObstacle() {
 		return obstacle;
@@ -12,7 +14,18 @@ public class Capteurs {
 		this.obstacle = obstacle;
 	}
 
-	public boolean isAccessible(int x,int y){
-		return Piece.estAccessiblePosition(x,y);
+	public boolean isAccessible(Position pos){
+		switch(side){
+			case 0://HAUT
+				return Piece.estAccessiblePosition(pos.getX(),pos.getY()+1);
+			case 1://DROIT
+				return Piece.estAccessiblePosition(pos.getX()+1,pos.getY());
+			case 2://GAUCHE
+				return Piece.estAccessiblePosition(pos.getX()-1,pos.getY());
+			case 3:
+				return Piece.estAccessiblePosition(pos.getX(),pos.getY()-1);
+			default:
+				return false;
+		}
 	}
 }
