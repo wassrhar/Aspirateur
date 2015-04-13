@@ -21,7 +21,10 @@ public class Piece extends Thread
     public static boolean estPropre=false;
     public Piece(String fichier) 
     {
+    	
         this.fichier = fichier;
+        this.chargerPiece();
+        this.listerPositions();
         this.taille = 0;
         this.description = "";
        
@@ -242,15 +245,34 @@ public class Piece extends Thread
         
     }
     /**
-     * Méthode run de la thread Piece, charge la pièce contenu dans piece.txt
+     * Méthode run de la thread Piece, charge la pièce contenu dans piece.txt. 
+     * Vérifie ensuite que toute la poussière ait été aspirée.
      */
     @Override
     public void run()
     {
-    	 this.chargerPiece();
-         this.listerPositions();
+    	System.out.println("PIECE : Ok");
+         while(true){
+        	if(calculerTotalPoussiere()==0){
+        		Piece.estPropre=true;
+        	}
+        	 try {
+				Piece.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+         }
     }
 
+	private int calculerTotalPoussiere() {
+		// TODO Auto-generated method stub
+		int total=0;
+		for(int i=0;i<positions.length;i++){
+			total=total+positions[i].getQtePoussiere();
+		}
+		return total;
+	}
 	@Override
 	public String toString() {
 		return "Piece [taille=" + taille + ", longueur=" + longueur

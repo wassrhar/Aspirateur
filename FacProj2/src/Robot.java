@@ -75,6 +75,7 @@ public class Robot extends Thread{
 	 */
 	@Override
 	public void run() {
+		System.out.println("ROBOT : Ok");
 		Chrono.Go_Chrono();
 		System.out.println("Depart de ("+positionBase.getX()+","+positionBase.getY()+")");
 		PositionParcouru deLaBase=new PositionParcouru(positionCourante.getX(),positionCourante.getY());
@@ -99,8 +100,7 @@ public class Robot extends Thread{
 	 */
 	public void deplacer() throws InterruptedException, outOfEnergy{		
 		setAspire(true);
-		int nbMove=100;
-		while(nbMove>0){
+		while(!Piece.estPropre){
 			setAspire(true);
 			ResultatRecurrence res=determinerPlusCourtCheminBase(positionCourante.getX(),positionCourante.getY(),new ArrayList<PositionParcouru>());
 
@@ -131,7 +131,6 @@ public class Robot extends Thread{
 					Robot.sleep(5000);
 					recharger();
 				}
-				nbMove--;
 			}
 		}
 	}

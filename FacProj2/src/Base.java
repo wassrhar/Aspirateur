@@ -32,6 +32,7 @@ public class Base extends Thread{
 	 */
 	@Override
 	public void run() {
+		System.out.println("BASE : Ok");
 		while(!Piece.estPropre){
 			try {
 				if(Robot.positionCourante.getX()==x && Robot.positionCourante.getY()==y){
