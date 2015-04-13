@@ -73,8 +73,10 @@ public class Robot extends Thread{
 				+ ", consommationBase=" + consommationBase + "]";
 	}
 
+
 	@Override
 	public void run() {
+		Chrono.Go_Chrono();
 		System.out.println("Depart de ("+positionBase.getX()+","+positionBase.getY()+")");
 		PositionParcouru deLaBase=new PositionParcouru(positionCourante.getX(),positionCourante.getY());
 		positionParcouru.add(deLaBase);
@@ -88,6 +90,8 @@ public class Robot extends Thread{
 			e.printStackTrace();
 		}
 	}
+	
+	
 	public void emprunterChemin(ArrayList<PositionParcouru> chemin) throws InterruptedException, outOfEnergy{
 		for(int i=0;i<chemin.size();i++){
 			if(Piece.estAccessiblePosition(chemin.get(i).getX(), chemin.get(i).getY())){
@@ -97,9 +101,11 @@ public class Robot extends Thread{
 	}
 	
 	public void deplacer() throws InterruptedException, outOfEnergy{
+		
 		setAspire(true);
 		int nbMove=100;
 		while(nbMove>0){
+			Chrono.Stop_Chrono();
 			/*System.out.println("----------------------------------------");
 			System.out.println("Le plus court chemin à partir de ("+positionCourante.getX()+","+positionCourante.getY()+") est le chemin : ");*/
 			ResultatRecurrence res=determinerPlusCourtCheminBase(positionCourante.getX(),positionCourante.getY(),new ArrayList<PositionParcouru>());
