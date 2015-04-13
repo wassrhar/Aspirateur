@@ -1,5 +1,10 @@
 
-
+/**
+ * La classe Positions symbolise une "case" dans la Piece. Celle-ci contient des coordonnées int x,y ainsi qu'un type (T0,00,T1,01...)
+ * et une quantité de poussières.
+ * @author Wassim
+ *
+ */
 public class Position{
 	private int x;
 	private int y;
@@ -39,7 +44,4 @@ public class Position{
 	public void setType(String type) {
 		this.type = type;
 	}
-	/*public boolean equals(Position p2){
-		return x==p2.getX() && y==p2.getY();
-	}*/
 }

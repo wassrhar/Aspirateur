@@ -1,25 +1,21 @@
 import java.util.ArrayList;
 
-
+/**
+ * Classe PositionParcouru. Symbolise une position dans la pièce mais vu par le robot. Cet objet comporte :
+ * 	- Les coordonnés x,y de la pièce à laquel il fait référence.
+ * 	- Un ArrayList<Integer> sensfait qui contient toutes les directions déja prises par le robot à partir d'ici
+ * @author Spazz
+ *
+ */
 public class PositionParcouru{
 	int x;
 	int y;
 	ArrayList<Integer> sensFait;
-	ArrayList<PositionParcouru> cheminLePlusCourt;
-	
-	public ArrayList<PositionParcouru> getCheminLePlusCourt() {
-		return cheminLePlusCourt;
-	}
-
-	public void setCheminLePlusCourt(ArrayList<PositionParcouru> cheminLePlusCourt) {
-		this.cheminLePlusCourt = cheminLePlusCourt;
-	}
 
 	PositionParcouru(int x,int y){
 		this.x=x;
 		this.y=y;
 		sensFait=new ArrayList<Integer>();
-		cheminLePlusCourt=null;
 	}
 	
 	public void ajouterSens(int sens){

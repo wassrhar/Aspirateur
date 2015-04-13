@@ -55,25 +55,24 @@ public class Robot extends Thread{
 		positionParcouru=new ArrayList<PositionParcouru>();
 	}
 	
+	/**
+	 * Permet de convertir les positions parcourus par le robot, de type PositionParcouru
+	 * en type Position (utile pour l'affichage).
+	 * @return ArrayList<Position>
+	 */
 	public ArrayList<Position> vectorPourAffichage(){
-		ArrayList<Position> toReturn = null;
+		ArrayList<Position> toReturn = new ArrayList<Position>();
 		for(int i=0;i<positionParcouru.size();i++){
 			toReturn.add(Piece.getPosition(positionParcouru.get(i).getX(), positionParcouru.get(i).getY()));
 		}
 		return toReturn;
 	}
-	@Override
-	public String toString() {
-		return "Robot [capaciteBatterie=" + capaciteBatterie
-				+ ", reservePoussiere=" + reservePoussiere + ", etatReserve="
-				+ etatReserve + ", directionCourante=" + directionCourante
-				+ ", droit=" + droit + ", gauche=" + gauche + ", haut=" + haut
-				+ ", bas=" + bas + ", antiVide=" + antiVide + ", positionCourante=" + positionCourante
-				+ ", puissance=" + puissance + ", aspire=" + aspire
-				+ ", consommationBase=" + consommationBase + "]";
-	}
-
-
+	/**
+	 * Methode run de la Thread ROBOT. Actions effectués :
+	 * 		- Initialise le chrono
+	 * 		- Affichage dans la console de la position de la base
+	 * 		- Lance la fonction déplacer
+	 */
 	@Override
 	public void run() {
 		Chrono.Go_Chrono();
@@ -91,7 +90,58 @@ public class Robot extends Thread{
 		}
 	}
 	
-	
+	/**
+	 * Déplace le robot dans la pièce. La fonction assure le retour à la base du robot
+	 * lorsque sa réserve est pleine ou lorsqu'il dispose du minimum de batterie nécessaire au retour.
+	 * 
+	 * @throws InterruptedException
+	 * @throws outOfEnergy
+	 */
+	public void deplacer() throws InterruptedException, outOfEnergy{		
+		setAspire(true);
+		int nbMove=100;
+		while(nbMove>0){
+			setAspire(true);
+			ResultatRecurrence res=determinerPlusCourtCheminBase(positionCourante.getX(),positionCourante.getY(),new ArrayList<PositionParcouru>());
+
+			bouger();
+			if(capaciteBatterie<consommationBase*4+calculerCout(res.getChemin())){
+				setAspire(false);
+				emprunterChemin(res.getChemin());
+				System.out.println("----EN ATTENTE DE LA BASE----");
+				while(!seCharge){System.out.print("");}
+				System.out.println("---ROBOT EN CHARGE---");
+				Robot.sleep(5000);
+				recharger();			
+			}
+			if(capaciteBatterie<calculerCout(res.getChemin())){
+				throw new outOfEnergy();
+			}
+			if(aspire){
+				aspirer();
+				if(capaciteBatterie<calculerCout(res.getChemin())){
+					throw new outOfEnergy();
+				}
+				if(capaciteBatterie<consommationBase*3+calculerCout(res.getChemin()) || etatReserve==reservePoussiere){
+					setAspire(false);
+					emprunterChemin(res.getChemin());
+					System.out.println("----EN ATTENTE DE LA BASE----");
+					while(!seCharge){System.out.print("");}
+					System.out.println("---ROBOT EN CHARGE---");
+					Robot.sleep(5000);
+					recharger();
+				}
+				nbMove--;
+			}
+		}
+	}
+
+	/**
+	 * Fait suivre le chemin passer en paramètre au robot.
+	 * @param chemin
+	 * @throws InterruptedException
+	 * @throws outOfEnergy
+	 */
 	public void emprunterChemin(ArrayList<PositionParcouru> chemin) throws InterruptedException, outOfEnergy{
 		for(int i=0;i<chemin.size();i++){
 			if(Piece.estAccessiblePosition(chemin.get(i).getX(), chemin.get(i).getY())){
@@ -100,47 +150,20 @@ public class Robot extends Thread{
 		}
 	}
 	
-	public void deplacer() throws InterruptedException, outOfEnergy{
-		
-		setAspire(true);
-		int nbMove=100;
-		while(nbMove>0){
-			Chrono.Stop_Chrono();
-			/*System.out.println("----------------------------------------");
-			System.out.println("Le plus court chemin à partir de ("+positionCourante.getX()+","+positionCourante.getY()+") est le chemin : ");*/
-			ResultatRecurrence res=determinerPlusCourtCheminBase(positionCourante.getX(),positionCourante.getY(),new ArrayList<PositionParcouru>());
-			
-		/*	for(int i=0;i<res.getChemin().size();i++){
-				System.out.println("("+res.getChemin().get(i).getX()+","+res.getChemin().get(i).getY()+")");
-			}*/
-		/*	System.out.println("Cout du chemin : "+calculerCout(res.getChemin()));
-			System.out.println("----------------------------------------");*/
-			bouger();
-			if(capaciteBatterie<calculerCout(res.getChemin())){
-				throw new outOfEnergy();
-			}
-			if(capaciteBatterie<consommationBase*3+calculerCout(res.getChemin())){
-				setAspire(false);
-				emprunterChemin(res.getChemin());
-				while(!seCharge){}
-				Robot.sleep(5000);
-			}
-			if(aspire){
-				aspirer();
-				if(capaciteBatterie<calculerCout(res.getChemin())){
-					throw new outOfEnergy();
-				}
-				if(capaciteBatterie<consommationBase*3+calculerCout(res.getChemin())){
-					setAspire(false);
-					emprunterChemin(res.getChemin());
-					while(!seCharge){}
-					System.out.println("---ROBOT EN CHARGE---");
-					Robot.sleep(5000);
-				}
-				nbMove--;
-			}
-		}
+	/**
+	 * Réinitialise les variables du robot (simulation d'une charge) 
+	 */
+	private void recharger() {
+		// TODO Auto-generated method stub
+		etatReserve=0;
+		capaciteBatterie=capaciteTotalBatterie;
 	}
+	
+	/**
+	 * Calcule le coût en batterie d'un chemin passer en paramètre.
+	 * @param chemin
+	 * @return la valeur calculée en float
+	 */
 	private float calculerCout(ArrayList<PositionParcouru> chemin){
 		float current=0;
 		for(int i=0;i<chemin.size();i++){
@@ -200,8 +223,11 @@ public class Robot extends Thread{
 		}
 	}
 	/**
-	 * Retourner l'indice dans positionParcouru des positions qui sont
-	 * directement accessible depuis la case passé en paramètre.
+	 * Retourne l'ensemble des positions accessibles depuis (x,y) 
+	 * 
+	 * @param x
+	 * @param y
+	 * @return Un tableau contenant l'indice des positions accessibles dans positionParcouru
 	 */
 	private ArrayList<Integer> estAccessible(int x,int y){
 		ArrayList<Integer> toReturn=new ArrayList<Integer>();
@@ -226,9 +252,27 @@ public class Robot extends Thread{
 		return toReturn;
 	}
 	
+	/**
+	 * Calcule une distance entre 2 points
+	 * @param x1
+	 * @param y1
+	 * @param x2
+	 * @param y2
+	 * @return La valeur calculée
+	 */
 	private double shortestDistanceBetweenPoints(int x1, int y1, int x2, int y2){
 		return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
 	}
+	
+	/**
+	 * Vérifie qu'il n'existe pas un chemin direct entre le point (x,y) et l'ensemble des points de aCheck.(càd qu'il n'y a pas de "carré")
+	 * @param x
+	 * @param y
+	 * @param aCheck
+	 * @param previousX
+	 * @param previousY
+	 * @return Un booléen, vrai s'il en existe, faux sinon
+	 */
 	private boolean existDirectPath(int x, int y, ArrayList<PositionParcouru> aCheck, int previousX, int previousY){
 		for(int i=0;i<aCheck.size();i++){
 			if(	(aCheck.get(i).getX()+1==x && aCheck.get(i).getY()==y) ||
@@ -242,6 +286,15 @@ public class Robot extends Thread{
 		}
 		return false;
 	}
+	
+	/**
+	 * Détermine le plus court chemin à la base en partant du point (courantX,courantY) sachant qu'on a déja cheminMinimal.
+	 * @param courantX
+	 * @param courantY
+	 * @param cheminMinimal
+	 * @return Le chemin et un booleen indiquant si le chemin mène bien à la base. Sinon, le chemin n'est pas utilisable(Impasse).
+	 * @throws InterruptedException
+	 */
 	private ResultatRecurrence determinerPlusCourtCheminBase(int courantX, int courantY,ArrayList<PositionParcouru> cheminMinimal) throws InterruptedException{
 		int baseX=getPositionBase().getX();
 		int baseY=getPositionBase().getY();
@@ -317,87 +370,14 @@ public class Robot extends Thread{
 			return new ResultatRecurrence(cheminMinimal, false);
 		}
 		
-	}
-	/*private ResultatRecurrence determinerPlusCourtCheminBase(int courantX, int courantY,ArrayList<PositionParcouru> cheminMinimal) throws InterruptedException{
-		int baseX=getPositionBase().getX();
-		int baseY=getPositionBase().getY();
-		ArrayList<Integer> nextOnes=estAccessible(courantX, courantY);
-		Thread.sleep(100);
-		//System.out.println("Taille de nextOnes : "+nextOnes.size()+" pour ("+courantX+","+courantY+"), taille chemin : "+cheminMinimal.size());
-		if(nextOnes.size()>0 && (courantX!=baseX || courantY!=baseY)){
-			if(nextOnes.size()==1){
-				if(positionParcouru.get(nextOnes.get(0)).getX()==baseX && positionParcouru.get(nextOnes.get(0)).getY()==baseY || cheminMinimal.size()==0){
-					//System.out.println("Ajout de ("+courantX+","+courantY+") dans nextones==1");
-					cheminMinimal.add(positionParcouru.get(getPositionParcouru(courantX, courantY)));
-					PositionParcouru tempo=positionParcouru.get(nextOnes.get(0));
-					return determinerPlusCourtCheminBase(tempo.getX(),tempo.getY(),cheminMinimal);
-				}
-				else{
-					return new ResultatRecurrence(cheminMinimal, false);
-				}
-			}
-			else{
-				int mini=Piece.getDimensions()[0]*Piece.getDimensions()[1];
-				while(nextOnes.size()>0){
-					double minimum=mini;
-					int aTest=0;
-					int maValue=0;
-					for(int j=0;j<nextOnes.size();j++){//DETERMINE LE POINT LE PLUS PROCHE DE LA BASE POUR LE TEST
-						PositionParcouru pos=positionParcouru.get(nextOnes.get(j));
-						double test=shortestDistanceBetweenPoints(pos.getX(), pos.getY(), baseX, baseY);
-						if(test<minimum){
-							minimum=test;
-							aTest=j;
-							maValue=nextOnes.get(j);
-						}
-					}
-					
-					nextOnes.remove(aTest);//ON LE SUPPRIME DES POINTS A TESTER
-					PositionParcouru tempo=positionParcouru.get(maValue);
-					if(!cheminMinimal.contains(tempo)){
-						if(!existDirectPath(tempo.getX(), tempo.getY(), cheminMinimal, courantX,courantY)){	
-							//System.out.println("Ajout de ("+positionParcouru.get(getPositionParcouru(courantX, courantY)).getX()+","+positionParcouru.get(getPositionParcouru(courantX, courantY)).getY()+") dans while !existDirectPath avec tempo("+tempo.getX()+","+tempo.getY()+")");
-							cheminMinimal.add(positionParcouru.get(getPositionParcouru(courantX, courantY)));
-							ResultatRecurrence res=determinerPlusCourtCheminBase(tempo.getX(),tempo.getY(),cheminMinimal);
-							if(res.isEstTermine()){
-								return res;
-							}
-							else{
-								//System.out.println("Suppresion de ("+cheminMinimal.get(cheminMinimal.size()-1).getX()+","+cheminMinimal.get(cheminMinimal.size()-1).getY()+") avec tempo("+tempo.getX()+","+tempo.getY()+")");
-								cheminMinimal.remove(cheminMinimal.size()-1);
-							}
-						}
-						else{
-							//System.out.println("Suppresion de ("+cheminMinimal.get(cheminMinimal.size()-1).getX()+","+cheminMinimal.get(cheminMinimal.size()-1).getY()+")");
-							cheminMinimal.remove(cheminMinimal.size()-1);
-							ResultatRecurrence res=determinerPlusCourtCheminBase(tempo.getX(),tempo.getY(),cheminMinimal);
-							if(res.isEstTermine()){
-								return res;
-							}
-							else{
-								//System.out.println("Suppresion de ("+cheminMinimal.get(cheminMinimal.size()-1).getX()+","+cheminMinimal.get(cheminMinimal.size()-1).getY()+") avec tempo("+tempo.getX()+","+tempo.getY()+")");
-								cheminMinimal.remove(cheminMinimal.size()-1);
-							}
-						}
-					}
-				}
-				return new ResultatRecurrence(cheminMinimal, false);
-			}
-		}
-		if(courantX==baseX && courantY==baseY){
-			//System.out.println("Ajout de ("+courantX+","+courantY+") dans dernier");
-			cheminMinimal.add(positionParcouru.get(getPositionParcouru(baseX, baseY)));
-			return new ResultatRecurrence(cheminMinimal,true);
-		}
-		else{
-			return new ResultatRecurrence(cheminMinimal, false);
-		}
-		
-	}
-	*/
+	}	
 	
-	
-	
+	/**
+	 * Retourne l'indice de la position(x,y) dans positionParcouru
+	 * @param x
+	 * @param y
+	 * @return l'indice
+	 */
 	private int getPositionParcouru(int x, int y){
 		for(int i=0;i<positionParcouru.size();i++){
 			if(positionParcouru.get(i).getX()==x && positionParcouru.get(i).getY()==y){
@@ -406,6 +386,14 @@ public class Robot extends Thread{
 		}
 		return -1;
 	}
+	/**
+	 * Cherche une nouvelle direction praticable à partir de la positionCourante, l'ordre de priorité étant :
+	 * 		- Haut
+	 * 		- Droit
+	 * 		- Gauche
+	 *		- Bas
+	 * La fonction ne retourne rien car elle se charge d'affecter la nouvelle direction au robot.
+	 */
 	private void findNewDirection() {
 		int courante=getPositionParcouru(positionCourante.getX(),positionCourante.getY());
 		if(courante<0){
@@ -499,6 +487,9 @@ public class Robot extends Thread{
 		estBloque=true;
 	}
 
+	/**
+	 * Fonction simulant une aspiration du robot.
+	 */
 	public void aspirer(){
 		int poussiereAspire=0;
 		while(positionCourante.getQtePoussiere()>0 && poussiereAspire<puissance && etatReserve<reservePoussiere){
@@ -506,7 +497,9 @@ public class Robot extends Thread{
 			etatReserve++;
 			poussiereAspire++;
 		}
+		System.out.println("ROBOT : Aspirer "+poussiereAspire+" pour ("+positionCourante.getX()+","+positionCourante.getY()+")" );
 	}
+	
 	public boolean isAspire() {
 		return aspire;
 	}
@@ -516,6 +509,14 @@ public class Robot extends Thread{
 	public Position getPositionCourante() {
 		return positionCourante;
 	}
+	/**
+	 * Mutateur de positionCourante. Se charge d'effectuer les modifications sur la batterie en fonction du
+	 * type de position sur laquelle le robot va.
+	 * Si le robot dispose d'assez de batterie, la position est affiché dans la console.
+	 * @param positionCourante
+	 * @throws InterruptedException
+	 * @throws outOfEnergy
+	 */
 	public void setPositionCourante(Position positionCourante) throws InterruptedException, outOfEnergy {
 		Robot.sleep(250);
 	
@@ -540,7 +541,9 @@ public class Robot extends Thread{
 		}
 		Robot.positionCourante = positionCourante;
 		positionCourante.afficher();
-		System.out.println("Etat de la batterie : "+capaciteBatterie+" Reservoir : "+etatReserve+"/"+reservePoussiere);
+		if(aspire){
+			System.out.println("Etat de la batterie : "+capaciteBatterie+" Reservoir : "+etatReserve+"/"+reservePoussiere);
+		}
 	}	
 	public float getCapaciteBatterie() {
 		return capaciteBatterie;
@@ -612,5 +615,15 @@ public class Robot extends Thread{
 
 	public void setCapaciteTotalBatterie(float capaciteTotalBatterie) {
 		this.capaciteTotalBatterie = capaciteTotalBatterie;
+	}
+	@Override
+	public String toString() {
+		return "Robot [capaciteBatterie=" + capaciteBatterie
+				+ ", reservePoussiere=" + reservePoussiere + ", etatReserve="
+				+ etatReserve + ", directionCourante=" + directionCourante
+				+ ", droit=" + droit + ", gauche=" + gauche + ", haut=" + haut
+				+ ", bas=" + bas + ", antiVide=" + antiVide + ", positionCourante=" + positionCourante
+				+ ", puissance=" + puissance + ", aspire=" + aspire
+				+ ", consommationBase=" + consommationBase + "]";
 	}
 }

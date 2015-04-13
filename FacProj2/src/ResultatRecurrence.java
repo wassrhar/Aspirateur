@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 
-
+/**
+ * Type de retour. Contient un chemin et un boolean indiquant si le chemin est utilisable.
+ * @author Spazz
+ *
+ */
 public class ResultatRecurrence {
 	ArrayList<PositionParcouru> chemin;
 	boolean estTermine;

@@ -26,7 +26,10 @@ public class Piece extends Thread
         this.description = "";
        
     }
-
+    /**
+     * Cherche la Position de la base dans positions.
+     * @return la base sous forme de Position.
+     */
     public Position getBase(){
 		for(int i=0;i<positions.length;i++){
 			if(positions[i].getType().equals("BB")){
@@ -38,6 +41,9 @@ public class Piece extends Thread
     public int getTaille() {
         return taille;
     }
+    /** 
+     * @return Les dimensions de la pièce sous forme de tableau d'entier. Indice 0=largeur/1=Longueur
+     */
     public static int[] getDimensions(){
     	int[] toReturn=new int[2];
     	toReturn[0]=largeur;
@@ -47,6 +53,12 @@ public class Piece extends Thread
     public void setTaille(int taille) {
         this.taille = taille;
     }
+    /**
+     * Cherche si la position(x,y) existe.
+     * @param x
+     * @param y
+     * @return Si elle exite et qu'elle n'est ni de type OO ou VV, retourne vrai, faux sinon.
+     */
     public static boolean estAccessiblePosition(int x, int y){
     	if(positions.length>0){
     		Position p1=null;
@@ -62,6 +74,12 @@ public class Piece extends Thread
     	}
     	return false;
     }
+    /**
+     * Retourne l'index de la position(x,y) dans positions
+     * @param x
+     * @param y
+     * @return l'indice, -2 si non trouvé
+     */
     public static int getIndexOfPosition(int x, int y){
 		for(int i=0;i<positions.length;i++){
 			if(positions[i].getX()==x && positions[i].getY()==y){
@@ -70,6 +88,12 @@ public class Piece extends Thread
 		}
 		return -2;
     }
+    /**
+     * Cherche la position(x,y) dans positions
+     * @param x
+     * @param y
+     * @return la Position si elle est trouvé, null sinon.
+     */
     public static Position getPosition(int x,int y){
     	Position p1=null;
 		for(int i=0;i<positions.length;i++){
@@ -79,14 +103,6 @@ public class Piece extends Thread
 		}
 		return p1;
     }
-    /*public int getIdOfPosition(int x,int y){
-    	for(int i=0;i<positions.length;i++){
-    		if(positions[i].getX()==x && positions[i].getY()==y){
-    			return i;
-    		}
-    	}
-    	return 0;
-    }*/
     public String getFichier() {
         return fichier;
     }
@@ -128,11 +144,8 @@ public class Piece extends Thread
     }
     
     /**
-    * Charge la description de la piece contenu dans le fichier
+    * Charge la description de la piece contenu dans le fichier.
     */
-    /**
-     * Charge la description de la piece contenu dans le fichier
-     */
      public void chargerPiece()
      {
          BufferedReader ficTexte;
@@ -228,7 +241,9 @@ public class Piece extends Thread
         }
         
     }
-    
+    /**
+     * Méthode run de la thread Piece, charge la pièce contenu dans piece.txt
+     */
     @Override
     public void run()
     {

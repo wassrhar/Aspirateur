@@ -1,12 +1,15 @@
-
+/**
+ * 
+ * @author Wassim
+ *
+ */
 public class Base extends Thread{
-	boolean robotEnCharge;
+
 	int x,y;
 	
 	Base(int tx, int ty, boolean rob){
 		x=tx;
 		y=ty;
-		robotEnCharge=rob;
 	}
 	public int getX() {
 		return x;
@@ -24,10 +27,9 @@ public class Base extends Thread{
 		this.y = y;
 	}
 
-	public boolean isRobotEnCharge() {
-		return robotEnCharge;
-	}
-
+	/**
+	 * Méthode run de la Thread Base. Envoie un signal au robot lorsque celui est sur la base (et peut se recharger).
+	 */
 	@Override
 	public void run() {
 		while(!Piece.estPropre){
@@ -44,9 +46,6 @@ public class Base extends Thread{
 				e.printStackTrace();
 			}
 		}
-	}
-	public void setRobotEnCharge(boolean robotEnCharge) {
-		this.robotEnCharge = robotEnCharge;
 	}
 	
 }
