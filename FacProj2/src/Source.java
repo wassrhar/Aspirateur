@@ -1,5 +1,5 @@
 
-public class Source{
+/*public class Source{
 	public static void main (String [] args) throws InterruptedException{
 		
 		Piece p1=new Piece("piece.txt");			
@@ -7,7 +7,8 @@ public class Source{
 		Position base=p1.getBase();
 		Robot r1=new Robot(100,40,3,1,base);
 		p1.start();
+		System.out.println(p1.getTaille());
 		r1.start();
 		b1.start();
 	}
-}
+}*/

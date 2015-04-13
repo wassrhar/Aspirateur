@@ -23,10 +23,10 @@ public class Piece extends Thread
     {
     	
         this.fichier = fichier;
-        this.chargerPiece();
-        this.listerPositions();
         this.taille = 0;
         this.description = "";
+        this.chargerPiece();
+        this.listerPositions();
        
     }
     /**
