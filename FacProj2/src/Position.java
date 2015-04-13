@@ -1,6 +1,6 @@
 
 /**
- * La classe Positions symbolise une "case" dans la Piece. Celle-ci contient des coordonnées int x,y ainsi qu'un type (T0,00,T1,01...)
+ * La classe Position symbolise une "case" dans la Piece. Celle-ci contient des coordonnées int x,y ainsi qu'un type (T0,00,T1,01...)
  * et une quantité de poussières.
  * @author Wassim
  *
