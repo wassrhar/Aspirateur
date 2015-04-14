@@ -13,9 +13,9 @@ public class Chrono {
 	}
 
 	// Arret du chrono
-	static void Stop_Chrono() {
+	static long Stop_Chrono() {
 	long chrono2 = java.lang.System.currentTimeMillis() ;
 	long temps = chrono2 - chrono ;
-	System.out.println("Temps ecoule = " + temps + " ms") ;
+	return temps;
 	} 
 }

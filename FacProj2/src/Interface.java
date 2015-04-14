@@ -19,6 +19,8 @@ public class Interface extends javax.swing.JFrame {
 
     // Déclarations des variables //
     Piece piece;
+    Base b1;
+    Robot r1;
     // Fin //
     
     /**
@@ -284,10 +286,18 @@ public class Interface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        piece = new Piece("piece.txt");      
-        piece.start();
+        setSize(750, 500);
+    	piece = new Piece("piece.txt");      
+		b1=new Base(piece.getBase().getX(),piece.getBase().getY(),true);
+		r1=new Robot(100,40,3,1,piece.getBase());
+		
+		piece.start();		
+		r1.start();
+		b1.start();
 
         CartePiece.positionsToCarte(piece.getPositions(), piece.getTaille(), piece.getLongueur(), piece.getLargeur());
+        LabelMaxReservoir.setText(Integer.toString(Robot.reservePoussiere));
+
 
     }//GEN-LAST:event_formWindowOpened
 
@@ -350,7 +360,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton ButtonHaut;
     private javax.swing.JButton ButtonMarche;
     private Carte CartePiece;
-    private Carte CarteRobot;
+    public static Carte CarteRobot;
     private javax.swing.JMenuItem ItemAuto;
     private javax.swing.JMenuItem ItemManuel;
     private javax.swing.JLabel LabelBatterie;
@@ -363,11 +373,11 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JLabel LabelSecondes;
     private javax.swing.JLabel LabelSlash;
     private javax.swing.JLabel LabelTemps;
-    private javax.swing.JLabel LabelValeurBatterie;
-    private javax.swing.JLabel LabelValeurMetrage;
-    private javax.swing.JLabel LabelValeurReservoir;
-    private javax.swing.JLabel LabelValeurRetours;
-    private javax.swing.JLabel LabelValeurTemps;
+    public static javax.swing.JLabel LabelValeurBatterie;
+    public static javax.swing.JLabel LabelValeurMetrage;
+    public static javax.swing.JLabel LabelValeurReservoir;
+    public static javax.swing.JLabel LabelValeurRetours;
+    public static javax.swing.JLabel LabelValeurTemps;
     private javax.swing.JMenuBar Menu;
     private javax.swing.JMenu MenuMode;
     private javax.swing.JPanel PanelRobot;

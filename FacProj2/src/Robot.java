@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Robot extends Thread{
 	private float capaciteTotalBatterie;
 	private float capaciteBatterie;
-	private int reservePoussiere;
+	public static int reservePoussiere;
 	private int etatReserve;
 	private int directionCourante;
 	/*
@@ -21,6 +21,8 @@ public class Robot extends Thread{
 	private Capteurs haut;
 	private Capteurs bas;
 	private Capteurs antiVide;
+	private int nbRetour;
+	private int metrage;
 	private Position positionBase;
 	public static boolean  seCharge=false;
 	public static Position positionCourante;
@@ -29,7 +31,10 @@ public class Robot extends Thread{
 	private float consommationBase=1;
 	private boolean estBloque=false;
 	private ArrayList<PositionParcouru> positionParcouru;
-	
+	 
+	public ArrayList<PositionParcouru> getLesPositionsParcouru(){
+		return positionParcouru;
+	}
 	Robot(float cap, int reser, int puiss, int direc, Position laBase){
 		droit=new Capteurs(1);
 		gauche=new Capteurs(2);
@@ -60,11 +65,21 @@ public class Robot extends Thread{
 	 * en type Position (utile pour l'affichage).
 	 * @return ArrayList<Position>
 	 */
-	public ArrayList<Position> vectorPourAffichage(){
-		ArrayList<Position> toReturn = new ArrayList<Position>();
-		for(int i=0;i<positionParcouru.size();i++){
-			toReturn.add(Piece.getPosition(positionParcouru.get(i).getX(), positionParcouru.get(i).getY()));
+	public Position[] vectorPourAffichage(){
+		Position[] toReturn = new Position[Piece.getDimensions()[0]*Piece.getDimensions()[1]];
+		for(int i=0; i<Piece.getDimensions()[0]; i++)
+		{
+			for(int j=0; j<Piece.getDimensions()[1]; j++)
+			{
+				toReturn[i*Piece.getDimensions()[1]+j] = new Position(i,j,"VV",0);
+			}
+			
 		}
+		
+		for(int i=0;i<positionParcouru.size();i++){
+			toReturn[positionParcouru.get(i).getX()*Piece.getDimensions()[1]+positionParcouru.get(i).getY()]=Piece.getPosition(positionParcouru.get(i).getX(), positionParcouru.get(i).getY());
+		}
+		
 		return toReturn;
 	}
 	/**
@@ -92,6 +107,17 @@ public class Robot extends Thread{
 		System.out.println("ROBOT : Fin");
 	}
 	
+	public void affichageUI(){
+		Interface.CarteRobot.positionsToCarte(vectorPourAffichage(), Piece.getDimensions()[0]*Piece.getDimensions()[1], Piece.getDimensions()[1], Piece.getDimensions()[0]);
+		Interface.CarteRobot.affichageAspirateur(positionCourante.getX(), positionCourante.getY());
+		Interface.CarteRobot.repaint();
+		Interface.LabelValeurBatterie.setText(Float.toString((capaciteBatterie/capaciteTotalBatterie)*100).substring(0, 3));
+		Interface.LabelValeurReservoir.setText(Integer.toString(etatReserve));
+		Interface.LabelValeurTemps.setText(Long.toString(Chrono.Stop_Chrono()/1000));
+		Interface.LabelValeurMetrage.setText(Integer.toString(metrage));
+		Interface.LabelValeurRetours.setText(Integer.toString(nbRetour));
+	}
+	
 	/**
 	 * Déplace le robot dans la pièce. La fonction assure le retour à la base du robot
 	 * lorsque sa réserve est pleine ou lorsqu'il dispose du minimum de batterie nécessaire au retour.
@@ -106,9 +132,11 @@ public class Robot extends Thread{
 			ResultatRecurrence res=determinerPlusCourtCheminBase(positionCourante.getX(),positionCourante.getY(),new ArrayList<PositionParcouru>());
 
 			bouger();
+			
 			if(capaciteBatterie<consommationBase*4+calculerCout(res.getChemin())){
 				setAspire(false);
 				emprunterChemin(res.getChemin());
+				nbRetour++;
 				System.out.println("----EN ATTENTE DE LA BASE----");
 				while(!seCharge){System.out.print("");}
 				System.out.println("---ROBOT EN CHARGE---");
@@ -126,6 +154,7 @@ public class Robot extends Thread{
 				if(capaciteBatterie<consommationBase*3+calculerCout(res.getChemin()) || etatReserve==reservePoussiere){
 					setAspire(false);
 					emprunterChemin(res.getChemin());
+					nbRetour++;
 					System.out.println("----EN ATTENTE DE LA BASE----");
 					while(!seCharge){System.out.print("");}
 					System.out.println("---ROBOT EN CHARGE---");
@@ -541,6 +570,8 @@ public class Robot extends Thread{
 		}
 		Robot.positionCourante = positionCourante;
 		positionCourante.afficher();
+		metrage++;
+		affichageUI();
 		if(aspire){
 			System.out.println("Etat de la batterie : "+capaciteBatterie+" Reservoir : "+etatReserve+"/"+reservePoussiere);
 		}

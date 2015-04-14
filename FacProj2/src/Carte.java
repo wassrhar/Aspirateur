@@ -36,6 +36,18 @@ public class Carte extends javax.swing.JPanel
 		this.carres = carres;
 	}
 
+	public void affichageAspirateur(int x, int y)
+	{
+		if(Piece.getPosition(x, y).getType().charAt(0) == 'B' ||
+				Piece.getPosition(x, y).getType().charAt(0) == '0')
+		{
+			carres[x][y].setImage(new ImageIcon("images/paspirateur.png").getImage());
+		}
+		else if(Piece.getPosition(x, y).getType().charAt(0) == 'T')
+		{
+			carres[x][y].setImage(new ImageIcon("images/taspirateur.png").getImage());
+		}
+	}
 
 	public int getLongueur() {
 		return longueur;
