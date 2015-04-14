@@ -289,7 +289,7 @@ public class Interface extends javax.swing.JFrame {
         setSize(750, 500);
     	piece = new Piece("piece.txt");      
 		b1=new Base(piece.getBase().getX(),piece.getBase().getY(),true);
-		r1=new Robot(100,40,3,1,piece.getBase());
+		r1=new Robot(500,120,3,1,piece.getBase());
 		
 		piece.start();		
 		r1.start();
