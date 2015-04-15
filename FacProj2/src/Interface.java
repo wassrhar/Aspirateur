@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -54,9 +55,12 @@ public class Interface extends javax.swing.JFrame {
         ButtonBas = new javax.swing.JButton();
         ButtonDroit = new javax.swing.JButton();
         ButtonGauche = new javax.swing.JButton();
+        LabelMode = new javax.swing.JLabel();
+        LabelAfficheMode = new javax.swing.JLabel();
+        LabelMessage = new javax.swing.JLabel();
         TabbedPanePiece = new javax.swing.JTabbedPane();
-        CarteRobot = new Carte();
-        CartePiece = new Carte();
+        CarteRobot = new robotaspirateur.Carte();
+        CartePiece = new robotaspirateur.Carte();
         Menu = new javax.swing.JMenuBar();
         MenuMode = new javax.swing.JMenu();
         ItemAuto = new javax.swing.JMenuItem();
@@ -73,7 +77,7 @@ public class Interface extends javax.swing.JFrame {
 
         LabelTemps.setText("Temps en marche :");
 
-        LabelMetrage.setText("Metrage :");
+        LabelMetrage.setText("Mètrage :");
 
         LabelValeurTemps.setText("0");
 
@@ -83,7 +87,7 @@ public class Interface extends javax.swing.JFrame {
 
         LabelMetres.setText("m");
 
-        LabelRetours.setText("Retours � la base :");
+        LabelRetours.setText("Retours à la base :");
 
         LabelValeurRetours.setText("0");
 
@@ -93,7 +97,7 @@ public class Interface extends javax.swing.JFrame {
 
         LabelPourcent.setText("%");
 
-        LabelReservoir.setText("Reservoir poussiere :");
+        LabelReservoir.setText("Réservoir poussiere :");
 
         LabelValeurReservoir.setText("0");
 
@@ -108,7 +112,7 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        ButtonArret.setText("Arret");
+        ButtonArret.setText("Arrêt");
         ButtonArret.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonArretActionPerformed(evt);
@@ -123,6 +127,11 @@ public class Interface extends javax.swing.JFrame {
         });
 
         ButtonBas.setText("v");
+        ButtonBas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonBasActionPerformed(evt);
+            }
+        });
 
         ButtonDroit.setText("->");
         ButtonDroit.addActionListener(new java.awt.event.ActionListener() {
@@ -132,6 +141,20 @@ public class Interface extends javax.swing.JFrame {
         });
 
         ButtonGauche.setText("<-");
+        ButtonGauche.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonGaucheActionPerformed(evt);
+            }
+        });
+
+        LabelMode.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        LabelMode.setText("Mode :");
+
+        LabelAfficheMode.setText("Automatique");
+
+        LabelMessage.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        LabelMessage.setForeground(new java.awt.Color(0, 0, 204));
+        LabelMessage.setText("Robot a l'arret...");
 
         javax.swing.GroupLayout PanelRobotLayout = new javax.swing.GroupLayout(PanelRobot);
         PanelRobot.setLayout(PanelRobotLayout);
@@ -139,99 +162,120 @@ public class Interface extends javax.swing.JFrame {
             PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelRobotLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, PanelRobotLayout.createSequentialGroup()
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelRobotLayout.createSequentialGroup()
+                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ButtonMarche, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ButtonGauche))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LabelTemps, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(LabelMetrage, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(LabelRetours)
+                            .addComponent(ButtonHaut, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ButtonBas, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ButtonArret, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ButtonDroit)))
+                    .addGroup(PanelRobotLayout.createSequentialGroup()
+                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(LabelBatterie)
-                            .addComponent(LabelReservoir))
+                            .addComponent(LabelReservoir)
+                            .addComponent(LabelMode)
+                            .addComponent(LabelRetours)
+                            .addComponent(LabelTemps, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(LabelMetrage, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelRobotLayout.createSequentialGroup()
                                 .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(LabelValeurTemps, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(LabelValeurMetrage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(LabelValeurRetours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(LabelValeurBatterie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(PanelRobotLayout.createSequentialGroup()
+                                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(LabelValeurTemps, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                                            .addComponent(LabelValeurMetrage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(22, 22, 22))
+                                    .addComponent(LabelValeurRetours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(34, 34, 34)
                                 .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(LabelSecondes)
-                                    .addComponent(LabelMetres)
-                                    .addComponent(LabelPourcent)))
+                                    .addComponent(LabelMetres)))
                             .addGroup(PanelRobotLayout.createSequentialGroup()
                                 .addComponent(LabelValeurReservoir, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(LabelSlash)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(LabelMaxReservoir, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
-                    .addGroup(PanelRobotLayout.createSequentialGroup()
-                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(ButtonMarche, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-                            .addComponent(ButtonArret, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelRobotLayout.createSequentialGroup()
-                                .addComponent(ButtonGauche)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ButtonBas, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(ButtonHaut, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ButtonDroit)
-                        .addGap(5, 5, 5))))
+                                .addComponent(LabelMaxReservoir, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelRobotLayout.createSequentialGroup()
+                                .addComponent(LabelValeurBatterie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(LabelPourcent)
+                                .addGap(4, 4, 4))
+                            .addComponent(LabelAfficheMode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(12, 12, 12)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelRobotLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(LabelMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
         PanelRobotLayout.setVerticalGroup(
             PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelRobotLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(21, 21, 21)
                 .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelTemps)
                     .addComponent(LabelValeurTemps)
                     .addComponent(LabelSecondes))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelMetrage)
                     .addComponent(LabelValeurMetrage)
                     .addComponent(LabelMetres))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelRetours)
                     .addComponent(LabelValeurRetours))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(28, 28, 28)
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelMode)
+                    .addComponent(LabelAfficheMode))
+                .addGap(18, 18, 18)
                 .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelBatterie)
                     .addComponent(LabelValeurBatterie)
                     .addComponent(LabelPourcent))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LabelReservoir)
                     .addComponent(LabelValeurReservoir)
-                    .addComponent(LabelMaxReservoir)
-                    .addComponent(LabelSlash))
-                .addGap(51, 51, 51)
+                    .addComponent(LabelSlash)
+                    .addComponent(LabelMaxReservoir))
+                .addGap(26, 26, 26)
                 .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ButtonMarche)
-                    .addComponent(ButtonHaut))
+                    .addComponent(ButtonMarche, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonArret, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonHaut, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ButtonArret)
-                    .addComponent(ButtonDroit)
-                    .addComponent(ButtonBas)
-                    .addComponent(ButtonGauche))
+                    .addComponent(ButtonGauche, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonBas, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonDroit, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(LabelMessage)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        LabelAfficheMode.getAccessibleContext().setAccessibleName("LabelAfficheMode");
+
+        TabbedPanePiece.setPreferredSize(new java.awt.Dimension(405, 425));
 
         javax.swing.GroupLayout CarteRobotLayout = new javax.swing.GroupLayout(CarteRobot);
         CarteRobot.setLayout(CarteRobotLayout);
         CarteRobotLayout.setHorizontalGroup(
             CarteRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 320, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         CarteRobotLayout.setVerticalGroup(
             CarteRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 247, Short.MAX_VALUE)
+            .addGap(0, 397, Short.MAX_VALUE)
         );
 
         TabbedPanePiece.addTab("Vue du Robot", CarteRobot);
@@ -240,11 +284,11 @@ public class Interface extends javax.swing.JFrame {
         CartePiece.setLayout(CartePieceLayout);
         CartePieceLayout.setHorizontalGroup(
             CartePieceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 320, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         CartePieceLayout.setVerticalGroup(
             CartePieceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 247, Short.MAX_VALUE)
+            .addGap(0, 397, Short.MAX_VALUE)
         );
 
         TabbedPanePiece.addTab("Carte de la Piece", CartePiece);
@@ -252,9 +296,19 @@ public class Interface extends javax.swing.JFrame {
         MenuMode.setText("Mode");
 
         ItemAuto.setText("Automatique");
+        ItemAuto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemAutoActionPerformed(evt);
+            }
+        });
         MenuMode.add(ItemAuto);
 
         ItemManuel.setText("Manuel");
+        ItemManuel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemManuelActionPerformed(evt);
+            }
+        });
         MenuMode.add(ItemManuel);
 
         Menu.add(MenuMode);
@@ -268,12 +322,13 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(PanelRobot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(TabbedPanePiece, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addComponent(TabbedPanePiece, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TabbedPanePiece)
+            .addComponent(TabbedPanePiece, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(PanelRobot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -286,14 +341,13 @@ public class Interface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        setSize(750, 500);
+
     	piece = new Piece("piece.txt");      
-		b1=new Base(piece.getBase().getX(),piece.getBase().getY(),true);
-		r1=new Robot(500,120,3,1,piece.getBase());
-		
-		piece.start();		
-		r1.start();
-		b1.start();
+        b1=new Base(piece.getBase().getX(),piece.getBase().getY(),true);
+        r1=new Robot(500,120,3,1,piece.getBase());
+
+        piece.start();		
+        b1.start();
 
         CartePiece.positionsToCarte(piece.getPositions(), piece.getTaille(), piece.getLongueur(), piece.getLargeur());
         LabelMaxReservoir.setText(Integer.toString(Robot.reservePoussiere));
@@ -302,20 +356,39 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void ButtonMarcheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonMarcheActionPerformed
-        // TODO add your handling code here:
+        if(r1.isAlive()) r1.resume();
+        else r1.start();
+        LabelMessage.setText("Robot en marche...");
     }//GEN-LAST:event_ButtonMarcheActionPerformed
 
     private void ButtonArretActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonArretActionPerformed
-        // TODO add your handling code here:
+        if(r1.isAlive()) r1.suspend();
+        LabelMessage.setText("Robot a l'arret...");
     }//GEN-LAST:event_ButtonArretActionPerformed
 
     private void ButtonHautActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonHautActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_ButtonHautActionPerformed
 
     private void ButtonDroitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDroitActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ButtonDroitActionPerformed
+
+    private void ButtonBasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonBasActionPerformed
+
+    private void ButtonGaucheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonGaucheActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonGaucheActionPerformed
+
+    private void ItemAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemAutoActionPerformed
+        LabelAfficheMode.setText("Automatique");
+    }//GEN-LAST:event_ItemAutoActionPerformed
+
+    private void ItemManuelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemManuelActionPerformed
+        LabelAfficheMode.setText("Manuel");
+    }//GEN-LAST:event_ItemManuelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -359,25 +432,490 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton ButtonGauche;
     private javax.swing.JButton ButtonHaut;
     private javax.swing.JButton ButtonMarche;
-    private Carte CartePiece;
-    public static Carte CarteRobot;
+    private robotaspirateur.Carte CartePiece;
+    private robotaspirateur.Carte CarteRobot;
     private javax.swing.JMenuItem ItemAuto;
     private javax.swing.JMenuItem ItemManuel;
+    private javax.swing.JLabel LabelAfficheMode;
     private javax.swing.JLabel LabelBatterie;
     private javax.swing.JLabel LabelMaxReservoir;
+    private javax.swing.JLabel LabelMessage;
     private javax.swing.JLabel LabelMetrage;
     private javax.swing.JLabel LabelMetres;
+    private javax.swing.JLabel LabelMode;
     private javax.swing.JLabel LabelPourcent;
     private javax.swing.JLabel LabelReservoir;
     private javax.swing.JLabel LabelRetours;
     private javax.swing.JLabel LabelSecondes;
     private javax.swing.JLabel LabelSlash;
     private javax.swing.JLabel LabelTemps;
-    public static javax.swing.JLabel LabelValeurBatterie;
-    public static javax.swing.JLabel LabelValeurMetrage;
-    public static javax.swing.JLabel LabelValeurReservoir;
-    public static javax.swing.JLabel LabelValeurRetours;
-    public static javax.swing.JLabel LabelValeurTemps;
+    private javax.swing.JLabel LabelValeurBatterie;
+    private javax.swing.JLabel LabelValeurMetrage;
+    private javax.swing.JLabel LabelValeurReservoir;
+    private javax.swing.JLabel LabelValeurRetours;
+    private javax.swing.JLabel LabelValeurTemps;
+    private javax.swing.JMenuBar Menu;
+    private javax.swing.JMenu MenuMode;
+    private javax.swing.JPanel PanelRobot;
+    private javax.swing.JTabbedPane TabbedPanePiece;
+    // End of variables declaration//GEN-END:variables
+}
+package robotaspirateur;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Sébastien
+ */
+public class Interface extends javax.swing.JFrame {
+
+    /**
+     * Creates new form Interface
+     */
+    public Interface() {
+        initComponents();
+    }
+
+    // Déclarations des variables //
+    Piece piece;
+    Base b1;
+    Robot r1;
+    // Fin //
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        PanelRobot = new javax.swing.JPanel();
+        LabelTemps = new javax.swing.JLabel();
+        LabelMetrage = new javax.swing.JLabel();
+        LabelValeurTemps = new javax.swing.JLabel();
+        LabelSecondes = new javax.swing.JLabel();
+        LabelValeurMetrage = new javax.swing.JLabel();
+        LabelMetres = new javax.swing.JLabel();
+        LabelRetours = new javax.swing.JLabel();
+        LabelValeurRetours = new javax.swing.JLabel();
+        LabelBatterie = new javax.swing.JLabel();
+        LabelValeurBatterie = new javax.swing.JLabel();
+        LabelPourcent = new javax.swing.JLabel();
+        LabelReservoir = new javax.swing.JLabel();
+        LabelValeurReservoir = new javax.swing.JLabel();
+        LabelMaxReservoir = new javax.swing.JLabel();
+        LabelSlash = new javax.swing.JLabel();
+        ButtonMarche = new javax.swing.JButton();
+        ButtonArret = new javax.swing.JButton();
+        ButtonHaut = new javax.swing.JButton();
+        ButtonBas = new javax.swing.JButton();
+        ButtonDroit = new javax.swing.JButton();
+        ButtonGauche = new javax.swing.JButton();
+        LabelMode = new javax.swing.JLabel();
+        LabelAfficheMode = new javax.swing.JLabel();
+        LabelMessage = new javax.swing.JLabel();
+        TabbedPanePiece = new javax.swing.JTabbedPane();
+        CarteRobot = new robotaspirateur.Carte();
+        CartePiece = new robotaspirateur.Carte();
+        Menu = new javax.swing.JMenuBar();
+        MenuMode = new javax.swing.JMenu();
+        ItemAuto = new javax.swing.JMenuItem();
+        ItemManuel = new javax.swing.JMenuItem();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+
+        PanelRobot.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Robot", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
+
+        LabelTemps.setText("Temps en marche :");
+
+        LabelMetrage.setText("Mètrage :");
+
+        LabelValeurTemps.setText("0");
+
+        LabelSecondes.setText("sec");
+
+        LabelValeurMetrage.setText("0");
+
+        LabelMetres.setText("m");
+
+        LabelRetours.setText("Retours à la base :");
+
+        LabelValeurRetours.setText("0");
+
+        LabelBatterie.setText("Batterie :");
+
+        LabelValeurBatterie.setText("100");
+
+        LabelPourcent.setText("%");
+
+        LabelReservoir.setText("Réservoir poussiere :");
+
+        LabelValeurReservoir.setText("0");
+
+        LabelMaxReservoir.setText("0");
+
+        LabelSlash.setText("/");
+
+        ButtonMarche.setText("Marche");
+        ButtonMarche.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonMarcheActionPerformed(evt);
+            }
+        });
+
+        ButtonArret.setText("Arrêt");
+        ButtonArret.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonArretActionPerformed(evt);
+            }
+        });
+
+        ButtonHaut.setText("^");
+        ButtonHaut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonHautActionPerformed(evt);
+            }
+        });
+
+        ButtonBas.setText("v");
+        ButtonBas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonBasActionPerformed(evt);
+            }
+        });
+
+        ButtonDroit.setText("->");
+        ButtonDroit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonDroitActionPerformed(evt);
+            }
+        });
+
+        ButtonGauche.setText("<-");
+        ButtonGauche.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ButtonGaucheActionPerformed(evt);
+            }
+        });
+
+        LabelMode.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        LabelMode.setText("Mode :");
+
+        LabelAfficheMode.setText("Automatique");
+
+        LabelMessage.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        LabelMessage.setForeground(new java.awt.Color(0, 0, 204));
+        LabelMessage.setText("Robot a l'arret...");
+
+        javax.swing.GroupLayout PanelRobotLayout = new javax.swing.GroupLayout(PanelRobot);
+        PanelRobot.setLayout(PanelRobotLayout);
+        PanelRobotLayout.setHorizontalGroup(
+            PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelRobotLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelRobotLayout.createSequentialGroup()
+                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ButtonMarche, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ButtonGauche))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ButtonHaut, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ButtonBas, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ButtonArret, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ButtonDroit)))
+                    .addGroup(PanelRobotLayout.createSequentialGroup()
+                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LabelBatterie)
+                            .addComponent(LabelReservoir)
+                            .addComponent(LabelMode)
+                            .addComponent(LabelRetours)
+                            .addComponent(LabelTemps, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(LabelMetrage, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelRobotLayout.createSequentialGroup()
+                                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(PanelRobotLayout.createSequentialGroup()
+                                        .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(LabelValeurTemps, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                                            .addComponent(LabelValeurMetrage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(22, 22, 22))
+                                    .addComponent(LabelValeurRetours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(34, 34, 34)
+                                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(LabelSecondes)
+                                    .addComponent(LabelMetres)))
+                            .addGroup(PanelRobotLayout.createSequentialGroup()
+                                .addComponent(LabelValeurReservoir, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(LabelSlash)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(LabelMaxReservoir, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelRobotLayout.createSequentialGroup()
+                                .addComponent(LabelValeurBatterie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(LabelPourcent)
+                                .addGap(4, 4, 4))
+                            .addComponent(LabelAfficheMode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(12, 12, 12)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelRobotLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(LabelMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
+        );
+        PanelRobotLayout.setVerticalGroup(
+            PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelRobotLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelTemps)
+                    .addComponent(LabelValeurTemps)
+                    .addComponent(LabelSecondes))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelMetrage)
+                    .addComponent(LabelValeurMetrage)
+                    .addComponent(LabelMetres))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelRetours)
+                    .addComponent(LabelValeurRetours))
+                .addGap(28, 28, 28)
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelMode)
+                    .addComponent(LabelAfficheMode))
+                .addGap(18, 18, 18)
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelBatterie)
+                    .addComponent(LabelValeurBatterie)
+                    .addComponent(LabelPourcent))
+                .addGap(18, 18, 18)
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LabelReservoir)
+                    .addComponent(LabelValeurReservoir)
+                    .addComponent(LabelSlash)
+                    .addComponent(LabelMaxReservoir))
+                .addGap(26, 26, 26)
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ButtonMarche, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonArret, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonHaut, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PanelRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ButtonGauche, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonBas, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ButtonDroit, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(LabelMessage)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        LabelAfficheMode.getAccessibleContext().setAccessibleName("LabelAfficheMode");
+
+        TabbedPanePiece.setPreferredSize(new java.awt.Dimension(405, 425));
+
+        javax.swing.GroupLayout CarteRobotLayout = new javax.swing.GroupLayout(CarteRobot);
+        CarteRobot.setLayout(CarteRobotLayout);
+        CarteRobotLayout.setHorizontalGroup(
+            CarteRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        CarteRobotLayout.setVerticalGroup(
+            CarteRobotLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 397, Short.MAX_VALUE)
+        );
+
+        TabbedPanePiece.addTab("Vue du Robot", CarteRobot);
+
+        javax.swing.GroupLayout CartePieceLayout = new javax.swing.GroupLayout(CartePiece);
+        CartePiece.setLayout(CartePieceLayout);
+        CartePieceLayout.setHorizontalGroup(
+            CartePieceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        CartePieceLayout.setVerticalGroup(
+            CartePieceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 397, Short.MAX_VALUE)
+        );
+
+        TabbedPanePiece.addTab("Carte de la Piece", CartePiece);
+
+        MenuMode.setText("Mode");
+
+        ItemAuto.setText("Automatique");
+        ItemAuto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemAutoActionPerformed(evt);
+            }
+        });
+        MenuMode.add(ItemAuto);
+
+        ItemManuel.setText("Manuel");
+        ItemManuel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ItemManuelActionPerformed(evt);
+            }
+        });
+        MenuMode.add(ItemManuel);
+
+        Menu.add(MenuMode);
+
+        setJMenuBar(Menu);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(PanelRobot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(TabbedPanePiece, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(TabbedPanePiece, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(PanelRobot, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        TabbedPanePiece.getAccessibleContext().setAccessibleName("tab");
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+
+    	piece = new Piece("piece.txt");      
+        b1=new Base(piece.getBase().getX(),piece.getBase().getY(),true);
+        r1=new Robot(500,120,3,1,piece.getBase());
+
+        piece.start();		
+        b1.start();
+
+        CartePiece.positionsToCarte(piece.getPositions(), piece.getTaille(), piece.getLongueur(), piece.getLargeur());
+        LabelMaxReservoir.setText(Integer.toString(Robot.reservePoussiere));
+
+
+    }//GEN-LAST:event_formWindowOpened
+
+    private void ButtonMarcheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonMarcheActionPerformed
+        if(r1.isAlive()) r1.resume();
+        else r1.start();
+        LabelMessage.setText("Robot en marche...");
+    }//GEN-LAST:event_ButtonMarcheActionPerformed
+
+    private void ButtonArretActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonArretActionPerformed
+        if(r1.isAlive()) r1.suspend();
+        LabelMessage.setText("Robot a l'arret...");
+    }//GEN-LAST:event_ButtonArretActionPerformed
+
+    private void ButtonHautActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonHautActionPerformed
+        
+    }//GEN-LAST:event_ButtonHautActionPerformed
+
+    private void ButtonDroitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDroitActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonDroitActionPerformed
+
+    private void ButtonBasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonBasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonBasActionPerformed
+
+    private void ButtonGaucheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonGaucheActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ButtonGaucheActionPerformed
+
+    private void ItemAutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemAutoActionPerformed
+        LabelAfficheMode.setText("Automatique");
+    }//GEN-LAST:event_ItemAutoActionPerformed
+
+    private void ItemManuelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemManuelActionPerformed
+        LabelAfficheMode.setText("Manuel");
+    }//GEN-LAST:event_ItemManuelActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Interface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Interface().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ButtonArret;
+    private javax.swing.JButton ButtonBas;
+    private javax.swing.JButton ButtonDroit;
+    private javax.swing.JButton ButtonGauche;
+    private javax.swing.JButton ButtonHaut;
+    private javax.swing.JButton ButtonMarche;
+    private robotaspirateur.Carte CartePiece;
+    private robotaspirateur.Carte CarteRobot;
+    private javax.swing.JMenuItem ItemAuto;
+    private javax.swing.JMenuItem ItemManuel;
+    private javax.swing.JLabel LabelAfficheMode;
+    private javax.swing.JLabel LabelBatterie;
+    private javax.swing.JLabel LabelMaxReservoir;
+    private javax.swing.JLabel LabelMessage;
+    private javax.swing.JLabel LabelMetrage;
+    private javax.swing.JLabel LabelMetres;
+    private javax.swing.JLabel LabelMode;
+    private javax.swing.JLabel LabelPourcent;
+    private javax.swing.JLabel LabelReservoir;
+    private javax.swing.JLabel LabelRetours;
+    private javax.swing.JLabel LabelSecondes;
+    private javax.swing.JLabel LabelSlash;
+    private javax.swing.JLabel LabelTemps;
+    private javax.swing.JLabel LabelValeurBatterie;
+    private javax.swing.JLabel LabelValeurMetrage;
+    private javax.swing.JLabel LabelValeurReservoir;
+    private javax.swing.JLabel LabelValeurRetours;
+    private javax.swing.JLabel LabelValeurTemps;
     private javax.swing.JMenuBar Menu;
     private javax.swing.JMenu MenuMode;
     private javax.swing.JPanel PanelRobot;
