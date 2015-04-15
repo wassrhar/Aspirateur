@@ -30,6 +30,8 @@ public class Robot extends Thread{
 	private boolean aspire;
 	private float consommationBase=1;
 	private boolean estBloque=false;
+	private boolean contourneSide=false;
+	private int distanceDepuisDerniereDecouverte;
 	private ArrayList<PositionParcouru> positionParcouru;
 	 
 	public ArrayList<PositionParcouru> getLesPositionsParcouru(){
@@ -45,6 +47,7 @@ public class Robot extends Thread{
 		reservePoussiere=reser;
 		etatReserve=0;
 		directionCourante=direc;
+		distanceDepuisDerniereDecouverte=0;
 		//Cartographie
 		//Capteurs
 		puissance=puiss;
@@ -104,9 +107,20 @@ public class Robot extends Thread{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("ROBOT : Fin");
+		try {
+			emprunterChemin(determinerPlusCourtCheminBase(positionCourante.getX(), positionCourante.getY(), new ArrayList<PositionParcouru>(), positionCourante.getX(), positionCourante.getY()).getChemin());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (outOfEnergy e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
+	/**
+	 * Affiche sur l'interface les paramètres dynamiques de la simulation (état de la batterie, de la reserve, métrage...).
+	 */
 	public void affichageUI(){
 		Interface.CarteRobot.positionsToCarte(vectorPourAffichage(), Piece.getDimensions()[0]*Piece.getDimensions()[1], Piece.getDimensions()[1], Piece.getDimensions()[0]);
 		Interface.CarteRobot.affichageAspirateur(positionCourante.getX(), positionCourante.getY());
@@ -227,6 +241,7 @@ public class Robot extends Thread{
 	public void bouger() throws InterruptedException, outOfEnergy{
 		int currentX=positionCourante.getX();
 		int currentY=positionCourante.getY();
+		boolean onPeutCheck=false;
 		if(positionParcouru.size()>1){ 
 			if(qtePoussiereNonTraite()>0){
 				int index=-2;
@@ -243,40 +258,74 @@ public class Robot extends Thread{
 					}
 				}
 				
-				if(index>0){//Si on a trouvé une case qui n'est pas encore complétement nettoyé et qui a été nettoyé
+				if(index>0){//Si on a trouvé une case qui n'est pas encore complétement nettoyé et qui a été nettoyé différente de celle sur laquelle on est
+					System.out.println("INDEX>0");
 					PositionParcouru aim=positionParcouru.get(index);
 					boolean aChange=false;
-					if(aim.getX()>positionCourante.getX()){
+					if(aim.getX()>positionCourante.getX() && !contourneSide){
 						if(droit.isAccessible(positionCourante)){
+							System.out.println("DROIT ACCESSIBLE X++");
 							currentX++;
 							aChange=true;
 						}
 					}
 					else if(aim.getY()>positionCourante.getY()){
 						if(haut.isAccessible(positionCourante)){
+							System.out.println("HAUT ACCESSIBLE Y++");
 							currentY++;
+							if(contourneSide){
+								onPeutCheck=true;
+							}
 							aChange=true;
 						}
 					}
 					if(!aChange){
-						if(aim.getX()<positionCourante.getX()){
+						if(aim.getX()<positionCourante.getX() && !contourneSide){
 							if(gauche.isAccessible(positionCourante)){
+								System.out.println("GAUCHE ACCESSIBLE X--");
 								currentX--;
 							}
 						}
 						else{
 							if(bas.isAccessible(positionCourante)){
+								System.out.println("BAS ACCESSIBLE Y--");
 								currentY--;
+								if(contourneSide){
+									onPeutCheck=true;
+								}
+							}
+							else if(droit.isAccessible(positionCourante)){
+								System.out.println("DEBLOCAGE X++");
+								contourneSide=true;
+								currentX++;
+							}
+							else if(haut.isAccessible(positionCourante)){
+								System.out.println("DEBLOCAGE Y--");
+								currentY++;
+							}
+							
+							else if(gauche.isAccessible(positionCourante)){
+								System.out.println("DEBLOCAGE X--");
+								contourneSide=true;
+								currentX--;
 							}
 						}
 					}
 					Position courante=Piece.getPosition(currentX, currentY);
 					PositionParcouru toAdd=new PositionParcouru(courante.getX(),courante.getY());
 					setPositionCourante(courante);
-					if(!positionParcouru.contains(courante)){
+					distanceDepuisDerniereDecouverte++;
+					if(!positionParcouru.contains(toAdd)){
 						positionParcouru.add(toAdd);
+						distanceDepuisDerniereDecouverte=0;
 					}
-				}else{//On explore à nouveau la pièce
+					if(aim.getX()<positionCourante.getX() && contourneSide && gauche.isAccessible(positionCourante) && onPeutCheck){
+						contourneSide=false;
+					}
+					else if(aim.getX()>positionCourante.getX() && contourneSide && droit.isAccessible(positionCourante) && onPeutCheck){
+						contourneSide=false;
+					}
+				}else{//On explore
 					boolean access=false;
 					switch(directionCourante){
 						case 0:
@@ -296,23 +345,64 @@ public class Robot extends Thread{
 							currentY--;
 							break;
 					}
-					if(access){		
+					if(access){
+						System.out.println("QTE>0&&ACCESS");
 						Position courante=Piece.getPosition(currentX, currentY);
-						PositionParcouru toAdd=new PositionParcouru(courante.getX(),courante.getY());		
-						if(!positionParcouru.contains(courante)){
+						PositionParcouru toAdd=new PositionParcouru(courante.getX(),courante.getY());
+						for(int i=0;i<positionParcouru.size();i++){
+						}
+						if(!positionParcouru.contains(toAdd)){
 							positionParcouru.add(toAdd);
+							setPositionCourante(courante);
+							distanceDepuisDerniereDecouverte=0;
+						}else{
+							System.out.println("RECHERCHE DE MIEUX");
+							if(droit.isAccessible(positionCourante) && !positionParcouru.contains(new PositionParcouru(positionCourante.getX()+1, positionCourante.getY()))){
+								positionParcouru.add(new PositionParcouru(positionCourante.getX()+1, positionCourante.getY()));
+								courante=Piece.getPosition(positionCourante.getX()+1, positionCourante.getY());
+								distanceDepuisDerniereDecouverte=0;
+								setPositionCourante(courante);
+								return;
+							}
+							if(gauche.isAccessible(positionCourante) && !positionParcouru.contains(new PositionParcouru(positionCourante.getX()-1, positionCourante.getY()))){
+								positionParcouru.add(new PositionParcouru(positionCourante.getX()-1, positionCourante.getY()));
+								courante=Piece.getPosition(positionCourante.getX()-1, positionCourante.getY());
+								distanceDepuisDerniereDecouverte=0;
+								setPositionCourante(courante);
+								return;
+							}
+							if(haut.isAccessible(positionCourante) && !positionParcouru.contains(new PositionParcouru(positionCourante.getX(), positionCourante.getY()+1))){
+								positionParcouru.add(new PositionParcouru(positionCourante.getX(), positionCourante.getY()+1));
+								courante=Piece.getPosition(positionCourante.getX(), positionCourante.getY()+1);
+								distanceDepuisDerniereDecouverte=0;
+								setPositionCourante(courante);
+								return;
+							}
+							if(bas.isAccessible(positionCourante) && !positionParcouru.contains(new PositionParcouru(positionCourante.getX(), positionCourante.getY()-1))){
+								positionParcouru.add(new PositionParcouru(positionCourante.getX(), positionCourante.getY()-1));
+								courante=Piece.getPosition(positionCourante.getX(), positionCourante.getY()-1);
+								distanceDepuisDerniereDecouverte=0;
+								setPositionCourante(courante);
+								return;
+							}
+							//ON TROUVE PAS MIEUX, ON DEVIE
+							if(distanceDepuisDerniereDecouverte>50){
+								findNewDirection();
+								distanceDepuisDerniereDecouverte=0;
+							}
+							distanceDepuisDerniereDecouverte++;
 						}
 						setPositionCourante(courante);
-						
 					}
 					else{
+						System.out.println("QTE>0&&!ACCESS");
 						findNewDirection();
 						bouger();
 					}
 				}
 				
 			}
-			else{
+			else{//qtePoussiereNonTraine=0
 				boolean access=false;
 				switch(directionCourante){
 					case 0:
@@ -333,47 +423,63 @@ public class Robot extends Thread{
 						break;
 				}
 				if(access){
+					System.out.println("QTE=0&&ACCESS");
 					Position courante=Piece.getPosition(currentX, currentY);
 					PositionParcouru toAdd=new PositionParcouru(courante.getX(),courante.getY());
-					if(!positionParcouru.contains(courante)){
+					for(int i=0;i<positionParcouru.size();i++){
+					}
+					if(!positionParcouru.contains(toAdd)){
 						positionParcouru.add(toAdd);
+						distanceDepuisDerniereDecouverte=0;
 						setPositionCourante(courante);
 					}else{
+						System.out.println("RECHERCHE DE MIEUX");
 						if(droit.isAccessible(positionCourante) && !positionParcouru.contains(new PositionParcouru(positionCourante.getX()+1, positionCourante.getY()))){
 							positionParcouru.add(new PositionParcouru(positionCourante.getX()+1, positionCourante.getY()));
 							courante=Piece.getPosition(positionCourante.getX()+1, positionCourante.getY());
+							distanceDepuisDerniereDecouverte=0;
 							setPositionCourante(courante);
 							return;
 						}
 						if(gauche.isAccessible(positionCourante) && !positionParcouru.contains(new PositionParcouru(positionCourante.getX()-1, positionCourante.getY()))){
 							positionParcouru.add(new PositionParcouru(positionCourante.getX()-1, positionCourante.getY()));
 							courante=Piece.getPosition(positionCourante.getX()-1, positionCourante.getY());
+							distanceDepuisDerniereDecouverte=0;
 							setPositionCourante(courante);
 							return;
 						}
 						if(haut.isAccessible(positionCourante) && !positionParcouru.contains(new PositionParcouru(positionCourante.getX(), positionCourante.getY()+1))){
 							positionParcouru.add(new PositionParcouru(positionCourante.getX(), positionCourante.getY()+1));
 							courante=Piece.getPosition(positionCourante.getX(), positionCourante.getY()+1);
+							distanceDepuisDerniereDecouverte=0;
 							setPositionCourante(courante);
 							return;
 						}
 						if(bas.isAccessible(positionCourante) && !positionParcouru.contains(new PositionParcouru(positionCourante.getX(), positionCourante.getY()-1))){
 							positionParcouru.add(new PositionParcouru(positionCourante.getX(), positionCourante.getY()-1));
 							courante=Piece.getPosition(positionCourante.getX(), positionCourante.getY()-1);
+							distanceDepuisDerniereDecouverte=0;
 							setPositionCourante(courante);
 							return;
 						}
+						//ON TROUVE PAS MIEUX, ON DEVIE
+						if(distanceDepuisDerniereDecouverte>50){
+							findNewDirection();
+							distanceDepuisDerniereDecouverte=0;
+						}
+						distanceDepuisDerniereDecouverte++;
 					}
 					setPositionCourante(courante);
 				}
 				else{
+					System.out.println("QTE=0&&!ACCESS");
 					findNewDirection();
 					bouger();
 				}
 			}
 		}
 		else{ //Démarrage du robot
-			
+			System.out.println("DEMARRAGE DU ROBOT");
 			boolean access=false;
 			switch(directionCourante){
 				case 0:
@@ -402,51 +508,14 @@ public class Robot extends Thread{
 				Position courante=Piece.getPosition(currentX, currentY);
 				PositionParcouru toAdd=new PositionParcouru(courante.getX(),courante.getY());
 				setPositionCourante(courante);
-				if(!positionParcouru.contains(courante)){
+				if(!positionParcouru.contains(toAdd)){
+					distanceDepuisDerniereDecouverte=0;
 					positionParcouru.add(toAdd);
 				}
 			}
 		}
 	}
-	/*public void bouger() throws InterruptedException, outOfEnergy{
-		boolean access=true;
-		int currentX=positionCourante.getX();
-		int currentY=positionCourante.getY();
-		switch(directionCourante){
-			case 0:
-				access=haut.isAccessible(positionCourante);
-				currentY++;
-				break;
-			case 1:
-				access=droit.isAccessible(positionCourante);
-				currentX++;
-				break;
-			case 2:
-				access=gauche.isAccessible(positionCourante);
-				currentX--;
-				break;
-			case 3:
-				access=bas.isAccessible(positionCourante);
-				currentY--;
-				break;
-		}
-		if(!access){
-			findNewDirection();
-			bouger();
-		}
-		else{
-			Position courante=Piece.getPosition(currentX, currentY);
-			setPositionCourante(courante);
-			PositionParcouru toAdd=new PositionParcouru(courante.getX(),courante.getY());
-			if(!positionParcouru.contains(toAdd)){
-				positionParcouru.add(toAdd);			
-			}
-			if(estBloque){
-				findNewDirection();//ICI
-				estBloque=false;
-			}
-		}
-	}*/
+	
 	/**
 	 * Retourne l'ensemble des positions accessibles depuis (x,y) 
 	 * 
