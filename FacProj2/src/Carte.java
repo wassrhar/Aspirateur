@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,7 +6,7 @@
  */
 
 /**
- *
+ * Classe Carte est un JPanel composée d'ImageIcon contenant chacune un mètre carre (16x16) de la carte à afficher
  * @author Sébastien
  */
 
@@ -36,6 +37,11 @@ public class Carte extends javax.swing.JPanel
 		this.carres = carres;
 	}
 
+	/**
+	* Affiche le robot aspirateur dans la Carte
+	* @param x est la coordonnées en abscisse du robot
+	* @param y est la coordonnées en ordonnée du robot
+	*/
 	public void affichageAspirateur(int x, int y)
 	{
 		if(Piece.getPosition(x, y).getType().charAt(0) == 'B' ||
@@ -81,6 +87,13 @@ public class Carte extends javax.swing.JPanel
 		}
 	}
 	
+	/**
+	* Enregistre l'image de son mètre carre pour chaque position
+	* @param positions est le tableau de Position à afficher dans la carte
+	* @param taille est la taille de positions
+	* @param longueur est la longueur de la pièce représentée par positions
+	* @param largeur est la largeur de la pièce représentée par positions
+	*/
 	public void positionsToCarte(Position[] positions, int taille, int longueur, int largeur)
 	{
 		this.longueur =longueur;
