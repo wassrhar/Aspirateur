@@ -7,8 +7,8 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Classe Piece Ã  nettoyer, c'est aussi un thread
- * @author SÃ©bastien
+ * Classe Piece Ãƒ  nettoyer, c'est aussi un thread
+ * @author SÃƒÂ©bastien
  */
 public class Piece extends Thread
 {
@@ -45,7 +45,7 @@ public class Piece extends Thread
         return taille;
     }
     /** 
-     * @return Les dimensions de la pièce sous forme de tableau d'entier. Indice 0=largeur/1=Longueur
+     * @return Les dimensions de la piÃ¨ce sous forme de tableau d'entier. Indice 0=largeur/1=Longueur
      */
     public static int[] getDimensions(){
     	int[] toReturn=new int[2];
@@ -81,7 +81,7 @@ public class Piece extends Thread
      * Retourne l'index de la position(x,y) dans positions
      * @param x
      * @param y
-     * @return l'indice, -2 si non trouvé
+     * @return l'indice, -2 si non trouvÃ©
      */
     public static int getIndexOfPosition(int x, int y){
 		for(int i=0;i<positions.length;i++){
@@ -95,7 +95,7 @@ public class Piece extends Thread
      * Cherche la position(x,y) dans positions
      * @param x
      * @param y
-     * @return la Position si elle est trouvé, null sinon.
+     * @return la Position si elle est trouvÃ©, null sinon.
      */
     public static Position getPosition(int x,int y){
     	Position p1=null;
@@ -189,7 +189,7 @@ public class Piece extends Thread
      }
     
     /**
-    * Rempli un vector de toutes les positions possibles dans la piÃ¨ce
+    * Rempli un vector de toutes les positions possibles dans la piÃƒÂ¨ce
     */
     public void listerPositions()
     {
@@ -245,8 +245,8 @@ public class Piece extends Thread
         
     }
     /**
-     * Méthode run de la thread Piece, charge la pièce contenu dans piece.txt. 
-     * Vérifie ensuite que toute la poussière ait été aspirée.
+     * MÃ©thode run de la thread Piece.
+     * VÃ©rifie que toute la poussiÃ¨re ait Ã©tÃ© aspirÃ©e.
      */
     @Override
     public void run()
@@ -275,6 +275,7 @@ public class Piece extends Thread
 		}
 		return total;
 	}
+	
 	@Override
 	public String toString() {
 		return "Piece [taille=" + taille + ", longueur=" + longueur
