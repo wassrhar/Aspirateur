@@ -5,13 +5,14 @@
  */
 
 /**
- *
- * @author S�bastien
+ * Classe DimensionsException est une Exception de dépassement de la taille maximale d'une pièce
+ * @author Sébastien
  */
 class DimensionsException extends Exception
 {
     public DimensionsException()
     {
-        super("Les dimensions de la pi�ce ne correspondent pas aux normes ! (max: 25 x 25)");
+        super("Les dimensions de la pièce ne correspondent pas aux normes ! (max: 25 x 25)");
     }  
 }
+
